@@ -1,0 +1,37 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\rafha\\Desktop\\c\u002B\u002B_projects\\OpenGL_3D_Rendering_1.5\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{24580021-E0A5-4432-A9A9-A3871C63CA45}|OpenGL_3D_Rendering_1.5\\OpenGL_3D_Rendering_1.5.vcxproj|C:\\Users\\rafha\\Desktop\\c\u002B\u002B_projects\\OpenGL_3D_Rendering_1.5\\OpenGL_3D_Rendering_1.5\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{24580021-E0A5-4432-A9A9-A3871C63CA45}|OpenGL_3D_Rendering_1.5\\OpenGL_3D_Rendering_1.5.vcxproj|solutionrelative:OpenGL_3D_Rendering_1.5\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "main.cpp",
+              "DocumentMoniker": "C:\\Users\\rafha\\Desktop\\c\u002B\u002B_projects\\OpenGL_3D_Rendering_1.5\\OpenGL_3D_Rendering_1.5\\main.cpp",
+              "RelativeDocumentMoniker": "OpenGL_3D_Rendering_1.5\\main.cpp",
+              "ToolTip": "C:\\Users\\rafha\\Desktop\\c\u002B\u002B_projects\\OpenGL_3D_Rendering_1.5\\OpenGL_3D_Rendering_1.5\\main.cpp",
+              "RelativeToolTip": "OpenGL_3D_Rendering_1.5\\main.cpp",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACQAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2024-12-14T23:01:43.524Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
