@@ -28,16 +28,16 @@ GLuint generateNoiseTexture(int width, int height) {
     return texture;
 }
 
-void renderNoiseTexture(GLuint noiseTexture) {
+void renderNoiseTexture(GLuint noiseTexture, float timeOffsetX, float timeOffsetY) {
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, noiseTexture);  // Bind the noise texture
 
     // Use a full-screen quad to display the texture
     glBegin(GL_QUADS);
-    glTexCoord2f(0.0f, 0.0f); glVertex2f(-1.0f, -1.0f);  // Bottom-left corner
-    glTexCoord2f(1.0f, 0.0f); glVertex2f(1.0f, -1.0f);  // Bottom-right corner
-    glTexCoord2f(1.0f, 1.0f); glVertex2f(1.0f, 1.0f);  // Top-right corner
-    glTexCoord2f(0.0f, 1.0f); glVertex2f(-1.0f, 1.0f);  // Top-left corner
+    glTexCoord2f(0.0f + timeOffsetX, 0.0f + timeOffsetY); glVertex2f(-1.0f, -1.0f);  // Bottom-left corner
+    glTexCoord2f(1.0f + timeOffsetX, 0.0f + timeOffsetY); glVertex2f(1.0f, -1.0f);  // Bottom-right corner
+    glTexCoord2f(1.0f + timeOffsetX, 1.0f + timeOffsetY); glVertex2f(1.0f, 1.0f);  // Top-right corner
+    glTexCoord2f(0.0f + timeOffsetX, 1.0f + timeOffsetY); glVertex2f(-1.0f, 1.0f);  // Top-left corner
     glEnd();
 
     glDisable(GL_TEXTURE_2D);
@@ -50,7 +50,7 @@ int main() {
     }
 
     // Create window
-    GLFWwindow* window = glfwCreateWindow(800, 600, "Smiley face confined to the bounds of an old TV!", NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(800, 600, "VHS Static", NULL, NULL);
     if (!window) {
         glfwTerminate();
         return -1;
@@ -60,6 +60,11 @@ int main() {
     glfwMakeContextCurrent(window);
 
     GLuint noiseTexture = generateNoiseTexture(1024, 1024);  // Generate the noise texture
+
+    // Animation parameters
+    float timeOffsetX = 0.0f, timeOffsetY = 0.0f;
+    float speedX = 0.001f, speedY = 0.001f;  // Speed of the noise movement
+
     while (!glfwWindowShouldClose(window)) {
         // Get framebuffer size to adjust to window size
         int width, height;
@@ -70,7 +75,11 @@ int main() {
         glClear(GL_COLOR_BUFFER_BIT);
 
         // Render noise texture on full-screen quad
-        renderNoiseTexture(noiseTexture);
+        renderNoiseTexture(noiseTexture, timeOffsetX, timeOffsetY);
+
+        // Update the texture offset for animation
+        timeOffsetX += speedX * 0.01f;  // Move texture horizontally
+        timeOffsetY += speedY * 0.01f;  // Move texture vertically
 
         // Swap buffers
         glfwSwapBuffers(window);
@@ -78,7 +87,6 @@ int main() {
         // Poll for events
         glfwPollEvents();
     }
-    
 
     // Cleanup
     glfwDestroyWindow(window);
