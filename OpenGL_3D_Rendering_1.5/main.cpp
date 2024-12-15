@@ -1,5 +1,34 @@
 #include <GLFW/glfw3.h>
 #include <cmath>
+#include <cstdlib>  // For random numbers
+
+// Function to generate noise texture
+GLuint generateNoiseTexture(int width, int height) {
+    unsigned char* data = new unsigned char[width * height * 3];
+
+    // Fill the texture with random noise (values between 0 and 255)
+    for (int i = 0; i < width * height * 3; i++) {
+        data[i] = rand() % 256;  // Random value for R, G, B
+    }
+
+    GLuint texture;
+    glGenTextures(1, &texture);
+    glBindTexture(GL_TEXTURE_2D, texture);
+
+    // Set texture parameters
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+    // Upload the noise data to the texture
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+
+    delete[] data;
+
+    return texture;
+}
+
 
 // Constants for circle resolution
 const int SEGMENTS = 100; // Number of segments for smooth circles
@@ -18,7 +47,7 @@ void drawCircle(float centerX, float centerY, float radius, float r, float g, fl
     glEnd();
 }
 
-// Function to draw a curved line (arc) for the smile
+// Function to draw a curved smile (arc)
 void drawArc(float centerX, float centerY, float radius, float startAngle, float endAngle, float r, float g, float b) {
     glColor3f(r, g, b); // Set colour
     glBegin(GL_LINE_STRIP);
@@ -47,7 +76,10 @@ int main() {
     // Make the context current
     glfwMakeContextCurrent(window);
 
-    // Set up coordinate system
+    // Generate the noise texture
+    GLuint noiseTexture = generateNoiseTexture(800, 600);
+
+    // Set up coordinate system (2D)
     glOrtho(-1.0, 1.0, -1.0, 1.0, -1.0, 1.0); // Normalise coordinates to [-1, 1]
 
     // Smiley face position
@@ -63,6 +95,19 @@ int main() {
 
         // Clear screen
         glClear(GL_COLOR_BUFFER_BIT);
+
+        // Draw the static (noise texture) as the background
+        glEnable(GL_TEXTURE_2D);
+        glBindTexture(GL_TEXTURE_2D, noiseTexture);
+
+        glBegin(GL_QUADS);
+        glTexCoord2f(0.0f, 0.0f); glVertex2f(-1.0f, -1.0f);
+        glTexCoord2f(1.0f, 0.0f); glVertex2f(1.0f, -1.0f);
+        glTexCoord2f(1.0f, 1.0f); glVertex2f(1.0f, 1.0f);
+        glTexCoord2f(0.0f, 1.0f); glVertex2f(-1.0f, 1.0f);
+        glEnd();
+
+        glDisable(GL_TEXTURE_2D);
 
         // Draw the smiley face
         drawCircle(faceX, faceY, 0.5f, 0.8f, 0.6f, 1.0f);   // Head (light purple)
@@ -94,6 +139,7 @@ int main() {
     // Cleanup
     glfwDestroyWindow(window);
     glfwTerminate();
+
     return 0;
 }
 
