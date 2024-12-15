@@ -1,30 +1,78 @@
 #include <GLFW/glfw3.h>
+#include <cmath>
+
+// Constants for circle resolution
+const int SEGMENTS = 100; // Number of segments for smooth circles
+
+// Function to draw a filled circle
+void drawCircle(float centerX, float centerY, float radius, float r, float g, float b) {
+    glColor3f(r, g, b); // Set colour
+    glBegin(GL_TRIANGLE_FAN);
+    glVertex2f(centerX, centerY); // Center of circle
+    for (int i = 0; i <= SEGMENTS; ++i) {
+        float angle = 2.0f * 3.1415926f * float(i) / float(SEGMENTS);
+        float x = centerX + radius * cosf(angle);
+        float y = centerY + radius * sinf(angle);
+        glVertex2f(x, y);
+    }
+    glEnd();
+}
+
+// Function to draw a curved line (arc) for the smile
+void drawArc(float centerX, float centerY, float radius, float startAngle, float endAngle, float r, float g, float b) {
+    glColor3f(r, g, b); // Set colour
+    glBegin(GL_LINE_STRIP);
+    for (int i = 0; i <= SEGMENTS; ++i) {
+        float angle = startAngle + (endAngle - startAngle) * i / SEGMENTS;
+        float x = centerX + radius * cosf(angle);
+        float y = centerY + radius * sinf(angle);
+        glVertex2f(x, y);
+    }
+    glEnd();
+}
 
 int main() {
-    // Init GLFW
+    // Initialise GLFW
     if (!glfwInit()) {
         return -1;
     }
 
-    // Create a window
-    GLFWwindow* window = glfwCreateWindow(800, 600, "Test 3D Rendering Engine", NULL, NULL);
+    // Create window
+    GLFWwindow* window = glfwCreateWindow(800, 600, "Smiley Face - Light Purple & Bigger Smile", NULL, NULL);
     if (!window) {
         glfwTerminate();
         return -1;
     }
 
+    // Make the context current
+    glfwMakeContextCurrent(window);
+
+    // Set up coordinate system
+    glOrtho(-1.0, 1.0, -1.0, 1.0, -1.0, 1.0); // Normalise coordinates to [-1, 1]
+
     // Main loop
     while (!glfwWindowShouldClose(window)) {
-        // Render graphics here
+        // Clear screen
+        glClear(GL_COLOR_BUFFER_BIT);
 
+        // Draw the smiley face
+        drawCircle(0.0f, 0.0f, 0.5f, 0.8f, 0.6f, 1.0f);   // Head (light purple)
+        drawCircle(-0.2f, 0.2f, 0.05f, 0.0f, 0.0f, 0.0f); // Left eye (black)
+        drawCircle(0.2f, 0.2f, 0.05f, 0.0f, 0.0f, 0.0f);  // Right eye (black)
+
+        // Draw a curved smile (arc)
+        drawArc(0.0f, -0.2f, 0.3f, 3.14f / 6, 5 * 3.14f / 6, 0.0f, 0.0f, 0.0f);
+
+        // Swap buffers
         glfwSwapBuffers(window);
+
+        // Poll for events
         glfwPollEvents();
     }
 
-    // Cleaning up
+    // Cleanup
     glfwDestroyWindow(window);
     glfwTerminate();
-
     return 0;
 }
 
