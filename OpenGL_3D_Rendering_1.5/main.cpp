@@ -1,13 +1,15 @@
 #include <GLFW/glfw3.h>
-#include <cmath>
 #include <cstdlib>  // For random numbers
 
 GLuint generateNoiseTexture(int width, int height) {
     unsigned char* data = new unsigned char[width * height * 3];  // RGB texture
 
-    // Fill the texture with random noise (values between 0 and 255)
-    for (int i = 0; i < width * height * 3; i++) {
-        data[i] = rand() % 256;  // Random value for R, G, B
+    // Fill the texture with random grayscale noise (values between 0 and 255)
+    for (int i = 0; i < width * height * 3; i += 3) {
+        unsigned char grayValue = rand() % 256;  // Random value for grayscale
+        data[i] = grayValue;     // Red channel
+        data[i + 1] = grayValue; // Green channel
+        data[i + 2] = grayValue; // Blue channel
     }
 
     GLuint texture;
@@ -63,7 +65,7 @@ int main() {
 
     // Animation parameters
     float timeOffsetX = 0.0f, timeOffsetY = 0.0f;
-    float speedX = 0.001f, speedY = 0.001f;  // Speed of the noise movement
+    float speedX = 0.02f, speedY = 0.02f;  // Slower speed for VHS effect
 
     while (!glfwWindowShouldClose(window)) {
         // Get framebuffer size to adjust to window size
@@ -78,8 +80,8 @@ int main() {
         renderNoiseTexture(noiseTexture, timeOffsetX, timeOffsetY);
 
         // Update the texture offset for animation
-        timeOffsetX += speedX * 0.01f;  // Move texture horizontally
-        timeOffsetY += speedY * 0.01f;  // Move texture vertically
+        timeOffsetX += speedX * 0.0001f;  // Move texture horizontally
+        timeOffsetY += speedY * 0.0001f;  // Move texture vertically
 
         // Swap buffers
         glfwSwapBuffers(window);
