@@ -38,7 +38,7 @@ int main() {
     }
 
     // Create window
-    GLFWwindow* window = glfwCreateWindow(800, 600, "Smiley Face - Light Purple & Bigger Smile", NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(800, 600, "Smiley face confined to the bounds of an old TV!", NULL, NULL);
     if (!window) {
         glfwTerminate();
         return -1;
@@ -50,18 +50,39 @@ int main() {
     // Set up coordinate system
     glOrtho(-1.0, 1.0, -1.0, 1.0, -1.0, 1.0); // Normalise coordinates to [-1, 1]
 
+    // Smiley face position
+    float faceX = 0.0f, faceY = 0.0f;
+    float speedX = 0.0002f, speedY = 0.0001f;  // How quick it moves across the screen
+
     // Main loop
     while (!glfwWindowShouldClose(window)) {
+        // Get framebuffer size to adjust to window size
+        int width, height;
+        glfwGetFramebufferSize(window, &width, &height);
+        glViewport(0, 0, width, height); // Adjust the viewport to the new size
+
         // Clear screen
         glClear(GL_COLOR_BUFFER_BIT);
 
         // Draw the smiley face
-        drawCircle(0.0f, 0.0f, 0.5f, 0.8f, 0.6f, 1.0f);   // Head (light purple)
-        drawCircle(-0.2f, 0.2f, 0.05f, 0.0f, 0.0f, 0.0f); // Left eye (black)
-        drawCircle(0.2f, 0.2f, 0.05f, 0.0f, 0.0f, 0.0f);  // Right eye (black)
+        drawCircle(faceX, faceY, 0.5f, 0.8f, 0.6f, 1.0f);   // Head (light purple)
+        drawCircle(faceX - 0.2f, faceY + 0.2f, 0.05f, 0.0f, 0.0f, 0.0f); // Left eye (black)
+        drawCircle(faceX + 0.2f, faceY + 0.2f, 0.05f, 0.0f, 0.0f, 0.0f);  // Right eye (black)
 
         // Draw a curved smile (arc)
-        drawArc(0.0f, -0.2f, 0.3f, 3.14f / 6, 5 * 3.14f / 6, 0.0f, 0.0f, 0.0f);
+        drawArc(faceX, faceY - 0.2f, 0.3f, 3.14f / 6, 5 * 3.14f / 6, 0.0f, 0.0f, 0.0f);
+
+        // Update position of the smiley face
+        faceX += speedX;
+        faceY += speedY;
+
+        // Bounce off the walls (change direction when hitting the edges)
+        if (faceX >= 1.0f || faceX <= -1.0f) {
+            speedX = -speedX;
+        }
+        if (faceY >= 1.0f || faceY <= -1.0f) {
+            speedY = -speedY;
+        }
 
         // Swap buffers
         glfwSwapBuffers(window);
